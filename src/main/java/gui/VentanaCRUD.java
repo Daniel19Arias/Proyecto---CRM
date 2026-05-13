@@ -140,30 +140,19 @@ public class VentanaCRUD extends JFrame {
         });
 
         select = new JMenuItem("Listar Pedidos");
-        insert = new JMenuItem("Insertar Pedido");
         delete = new JMenuItem("Eliminar Pedido");
-        update = new JMenuItem("Actualizar Pedido");
         pedido.add(select);
-        pedido.add(insert);
         pedido.add(delete);
-        pedido.add(update);
         menuPrincipal.add(pedido);
         select.addActionListener(e -> {
             selectPedidos selectPedidos = new selectPedidos();
             selectPedidos.selectPedidos();
         });
-        insert.addActionListener(e -> {
-            insertPedido insertPedido = new insertPedido();
-            insertPedido.insertPedido();
-        });
         delete.addActionListener(e -> {
             deletePedido deletePedido = new deletePedido();
             deletePedido.deletePedido();
         });
-        update.addActionListener(e -> {
-            updatePedido updatePedido = new updatePedido();
-            updatePedido.updatePedido();
-        });
+
 
         select = new JMenuItem("Listar Productos");
         insert = new JMenuItem("Insertar Producto");
