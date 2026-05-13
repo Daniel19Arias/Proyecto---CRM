@@ -1,0 +1,8 @@
+target/
+src/main/resources/db.properties
+*.txt
+*.dat
+*.log
+.idea/
+*.iml
+*.class
