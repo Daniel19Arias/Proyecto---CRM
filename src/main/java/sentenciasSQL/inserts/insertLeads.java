@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class insertLeads extends conexionDB {
     private String nombre,empresa,telefono,email,fuente,estado;
-    protected String[] opcionesFuente = {"Seleccione una opción","Pagina Web", "Linkedin", "Feria Sectorial", "Instagram Ads", "Google Search", "Llamada en frio"};
+    public String[] opcionesFuente = {"Seleccione una opción","Pagina Web", "Linkedin", "Feria Sectorial", "Instagram Ads", "Google Search", "Llamada en frio"};
     protected String[] opcionEstado = {"Seleccione una opción", "Nuevo","En seguimiento","Perdido"};
     PreparedStatement preparedStatement;
     public void insertLeads(){
@@ -43,7 +43,7 @@ public class insertLeads extends conexionDB {
             preparedStatement.setString(4,email);
 
             String eleccion = (String) JOptionPane.showInputDialog(null,
-                    "Selecciona una fuente de captación","Fuente de Captación",
+                    "","Fuente de Captación",
                     JOptionPane.QUESTION_MESSAGE,
                     null,
                     opcionesFuente,
@@ -61,7 +61,7 @@ public class insertLeads extends conexionDB {
                     opcionEstado,
                     opcionEstado[0]);
             if (opcion != null && opcion != opcionEstado[0]) {
-                estado = opcionEstado[0];
+                estado = opcion;
             }else {
                 throw new eleccionIncorrecta();
             }

@@ -110,8 +110,8 @@ public class VentanaCRUD extends JFrame {
            deletecomercial.deleteComercial();
         });
         update.addActionListener(e -> {
-            updateClientes updateClientes = new updateClientes();
-            updateClientes.updateClientes();
+            updateComercial updateComercial = new updateComercial();
+            updateComercial.updateComercial();
         });
 
         select =  new JMenuItem("Listar Facturas");

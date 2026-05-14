@@ -4,28 +4,28 @@ import javax.swing.*;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import database.*;
+import excepciones.comprobarEmail;
+import excepciones.comprobarTelefono;
 import excepciones.sinPermisos;
 
 public class updateComercial extends conexionDB{
     PreparedStatement preparedStatement;
-    String id;
-    int id_final;
+    int id;
     String opcionString;
     int opcion;
     String nuevoValor;
     public void updateComercial(){
         try {
             abrirConexionDB();
-            id = JOptionPane.showInputDialog("ID del comercial que deseas modificar: ");
-            id_final = Integer.parseInt(id);
+            id = Integer.parseInt(JOptionPane.showInputDialog("ID del comercial que deseas modificar: "));
+
 
             opcionString = JOptionPane.showInputDialog("Que columna deseas modificar\n" +
                     "1. Nombre\n"+
                     "2. Apellidos\n"+
                     "3. Email\n"+
                     "4. Teléfono\n"+
-                    "5. Zona Geográfica\n"+
-                    "6. Fecha de Alta"
+                    "5. Zona Geográfica"
             );
             opcion = Integer.parseInt(opcionString);
 
@@ -46,17 +46,27 @@ public class updateComercial extends conexionDB{
                 case 5:
                     columnaMod = SchemaDB.COL_COMER_ZONA;
                     break;
-                case 6:
-                    columnaMod = SchemaDB.COL_COMER_FECHA;
-                    break;
             }
             nuevoValor = JOptionPane.showInputDialog("Escribe el nuevo valor");
 
             String SQL = String.format("UPDATE %s SET %s = ? WHERE %s = ?",
                     SchemaDB.TAB_COMER,columnaMod,SchemaDB.COL_COMER_ID);
             preparedStatement = conexion.prepareStatement(SQL);
-            preparedStatement.setString(1,nuevoValor);
-            preparedStatement.setInt(2,id_final);
+            if (columnaMod.equals(SchemaDB.COL_COMER_TELEFONO)){
+                if (nuevoValor == null || !nuevoValor.matches("^[0-9]{9}$")){
+                    throw new comprobarTelefono();
+                }
+                preparedStatement.setString(1,nuevoValor);
+            } else if (columnaMod.equals(SchemaDB.COL_COMER_EMAIL)){
+                if (nuevoValor == null || !nuevoValor.contains("@")){
+                    throw new comprobarEmail();
+                }
+                preparedStatement.setString(1,nuevoValor);
+            }else {
+                preparedStatement.setString(1,nuevoValor);
+            }
+            preparedStatement.setInt(2,id);
+
             int filas = preparedStatement.executeUpdate();
             JOptionPane.showMessageDialog(null ,"Filas modificadas "+filas);
 
