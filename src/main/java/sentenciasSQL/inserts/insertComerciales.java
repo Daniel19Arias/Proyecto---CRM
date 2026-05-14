@@ -2,6 +2,7 @@ package sentenciasSQL.inserts;
 
 import javax.swing.*;
 import database.*;
+import excepciones.comprobarCampoVacio;
 import excepciones.comprobarEmail;
 import excepciones.sinPermisos;
 
@@ -9,18 +10,24 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class insertComerciales extends conexionDB {
-    private String nombre,apellidos,email,telefono,zona_geografica,fecha_alta;
+    private String nombre,apellidos,email,telefono,zona_geografica;
     PreparedStatement preparedStatement;
     public void insertComerciales(){
         try {
             abrirConexionDB();
-            String SQL = String.format("INSERT INTO %s (%s,%s,%s,%s,%s,%s) VALUES(?,?,?,?,?,?)",
-                    SchemaDB.TAB_COMER,SchemaDB.COL_COMER_NOM,SchemaDB.COL_COMER_APE,SchemaDB.COL_COMER_EMAIL,SchemaDB.COL_COMER_TELEFONO,SchemaDB.COL_COMER_ZONA,SchemaDB.COL_COMER_FECHA);
+            String SQL = String.format("INSERT INTO %s (%s,%s,%s,%s,%s) VALUES(?,?,?,?,?)",
+                    SchemaDB.TAB_COMER,SchemaDB.COL_COMER_NOM,SchemaDB.COL_COMER_APE,SchemaDB.COL_COMER_EMAIL,SchemaDB.COL_COMER_TELEFONO,SchemaDB.COL_COMER_ZONA);
             preparedStatement = conexion.prepareStatement(SQL);
             nombre = JOptionPane.showInputDialog("Nombre: ");
+            if (nombre.equals("")) {
+                throw new comprobarCampoVacio();
+            }
             preparedStatement.setString(1,nombre);
 
             apellidos = JOptionPane.showInputDialog("Apellidos: ");
+            if (apellidos.equals("")) {
+                throw new comprobarCampoVacio();
+            }
             preparedStatement.setString(2,apellidos);
 
             email = JOptionPane.showInputDialog("Email: ");
@@ -30,17 +37,20 @@ public class insertComerciales extends conexionDB {
             preparedStatement.setString(3,email);
 
             telefono = JOptionPane.showInputDialog("Teléfono: ");
+            if (telefono.equals("")) {
+                throw new comprobarCampoVacio();
+            }
             preparedStatement.setString(4,telefono);
 
             zona_geografica = JOptionPane.showInputDialog("Zona Geográfica: ");
+            if (zona_geografica.equals("")) {
+                throw new comprobarCampoVacio();
+            }
             preparedStatement.setString(5,zona_geografica);
-
-            fecha_alta = JOptionPane.showInputDialog("Fecha de alta: ");
-            preparedStatement.setString(6,fecha_alta);
 
             int fila = preparedStatement.executeUpdate();
             if (fila > 0) {
-                JOptionPane.showMessageDialog(null ,"Filas modificadas "+fila);
+                JOptionPane.showMessageDialog(null ,"Comercial insertado correctamente\nFilas modificadas: "+fila);
             }else {
                 JOptionPane.showMessageDialog(null ,"No se pudo modificar ninguna fila");
             }

@@ -11,7 +11,6 @@ public class conexionDB {
     protected Connection conexion;
     private Properties propiedades;
 
-    // Variables estáticas para recordar quién inició sesión en toda la app
     public static String usuarioNativo;
     public static String passwordNativa;
 
@@ -32,7 +31,7 @@ public class conexionDB {
     public boolean validarCredenciales(String usuario, String pass) {
         try {
             // Obtenemos SOLO la URL de tu db.properties
-            String url = propiedades.getProperty("mysql.url");
+            String url = propiedades.getProperty("mariadb.url");
 
             // Intentamos hacer una conexión REAL a la base de datos con los datos del login
             Connection conexionPrueba = DriverManager.getConnection(url, usuario, pass);
@@ -56,7 +55,7 @@ public class conexionDB {
 
     public void abrirConexionDB() {
         try {
-            String url = propiedades.getProperty("mysql.url");
+            String url = propiedades.getProperty("mariadb.url");
 
             // Ahora la conexión no usa un texto fijo, sino el usuario que se validó en el login
             conexion = DriverManager.getConnection(url, usuarioNativo, passwordNativa);
