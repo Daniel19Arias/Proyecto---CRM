@@ -54,6 +54,7 @@ public class VentanaLogin extends JFrame {
                     System.exit(0);
                 } else {
                     JOptionPane.showMessageDialog(null, "Nombre de usuario o contraseña incorrectos.\nIntentos restantes: " + (3 - intentos), "ERROR", JOptionPane.ERROR_MESSAGE);
+                    nombre.setText("");
                     password.setText("");
                 }
             }
