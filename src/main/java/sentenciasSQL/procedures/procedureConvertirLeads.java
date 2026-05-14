@@ -1,6 +1,7 @@
 package sentenciasSQL.procedures;
 
 import database.*;
+import excepciones.comprobarNif;
 import excepciones.sinPermisos;
 
 import javax.swing.*;
@@ -19,6 +20,9 @@ public class procedureConvertirLeads extends conexionDB{
             preparedStatement.setInt(1, id);
 
             String nif= JOptionPane.showInputDialog(null, "Ingrese NIF del lead");
+            if (!nif.matches("^[0-9]{8}[a-zA-Z]$")){
+                throw new comprobarNif();
+            }
             preparedStatement.setString(2, nif);
 
             String direccion =  JOptionPane.showInputDialog(null, "Ingrese Dirección del lead");

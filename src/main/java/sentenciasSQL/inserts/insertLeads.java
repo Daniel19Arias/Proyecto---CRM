@@ -2,6 +2,7 @@ package sentenciasSQL.inserts;
 
 import javax.swing.*;
 import database.*;
+import excepciones.comprobarEmail;
 import excepciones.sinPermisos;
 
 import java.sql.PreparedStatement;
@@ -26,6 +27,9 @@ public class insertLeads extends conexionDB {
             preparedStatement.setString(3,telefono);
 
             email = JOptionPane.showInputDialog("Email: ");
+            if (!email.contains("@")){
+                throw new comprobarEmail();
+            }
             preparedStatement.setString(4,email);
 
             fuente = JOptionPane.showInputDialog("Fuente Captacion: ");

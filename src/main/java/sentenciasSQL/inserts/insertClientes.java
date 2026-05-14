@@ -2,6 +2,8 @@ package sentenciasSQL.inserts;
 
 import javax.swing.*;
 import database.*;
+import excepciones.comprobarEmail;
+import excepciones.comprobarNif;
 import excepciones.sinPermisos;
 
 import java.sql.PreparedStatement;
@@ -21,6 +23,9 @@ public class insertClientes extends conexionDB {
             preparedStatement.setString(1,razon_social);
 
             nif = JOptionPane.showInputDialog("NIF: ");
+            if (!nif.matches("^[0-9]{8}[a-zA-Z]$")){
+                throw new comprobarNif();
+            }
             preparedStatement.setString(2,nif);
 
             direccion = JOptionPane.showInputDialog("Dirección Fiscal: ");
@@ -33,6 +38,9 @@ public class insertClientes extends conexionDB {
             preparedStatement.setString(5,telefono);
 
             email = JOptionPane.showInputDialog("Email: ");
+            if (!email.contains("@")){
+                throw new comprobarEmail();
+            }
             preparedStatement.setString(6,email);
 
             condicion_pago = JOptionPane.showInputDialog("Condición de pago: ");
