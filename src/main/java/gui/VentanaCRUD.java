@@ -10,7 +10,7 @@ import javax.swing.*;
 
 public class VentanaCRUD extends JFrame {
     protected JMenuBar menuPrincipal =  new JMenuBar();
-    protected JMenu leads,cliente,comercial,detalle_pedido,factura,pedido,producto,salir;
+    protected JMenu leads,cliente,comercial,detalle_pedido,factura,pedido,producto,interacciones,salir;
     protected JMenuItem select,insert,delete,update,cerrarSesion,procedure;
     public VentanaCRUD(){
         setTitle("CRM - AdromiTech");
@@ -27,6 +27,7 @@ public class VentanaCRUD extends JFrame {
         factura = new JMenu("Facturas");
         pedido = new JMenu("Pedidos");
         producto = new JMenu("Productos");
+        interacciones = new JMenu("Interacciones");
         salir = new JMenu("Salir");
 
         select = new  JMenuItem("Listar Leads");
@@ -178,6 +179,14 @@ public class VentanaCRUD extends JFrame {
         update.addActionListener(e -> {
            updateProducto updateProducto = new  updateProducto();
            updateProducto.updateProducto();
+        });
+
+        select = new JMenuItem("Listar Interacciones");
+        interacciones.add(select);
+        menuPrincipal.add(interacciones);
+        select.addActionListener(e -> {
+            selectInteracciones selectInteracciones = new selectInteracciones();
+            selectInteracciones.listarInteracciones();
         });
 
         cerrarSesion = new JMenuItem("Cerrar Sesión");

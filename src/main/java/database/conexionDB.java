@@ -6,11 +6,15 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoDatabase;
 
 public class conexionDB {
     protected Connection conexion;
     private Properties propiedades;
 
+    // Variables estáticas para recordar quién inició sesión en toda la app
     public static String usuarioNativo;
     public static String passwordNativa;
 
@@ -74,5 +78,22 @@ public class conexionDB {
         } catch (SQLException e) {
             System.out.println("Error al cerrar: " + e.getMessage());
         }
+    }
+
+    // --- MÉTODOS PARA MONGODB ---
+
+    public MongoClient abrirConexionMongo() {
+        try {
+            String uri = propiedades.getProperty("mongo.uri");
+            return MongoClients.create(uri);
+        } catch (Exception e) {
+            System.out.println("Error al conectar a MongoDB: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public MongoDatabase getDatabaseMongo(MongoClient client) {
+        String dbName = propiedades.getProperty("mongo.db");
+        return client.getDatabase(dbName);
     }
 }
