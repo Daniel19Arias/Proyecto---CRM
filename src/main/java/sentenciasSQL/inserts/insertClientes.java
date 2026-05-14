@@ -8,15 +8,14 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class insertClientes extends conexionDB {
-    private String razon_social,nif,direccion,contacto_principal,telefono,email,condicion_pago,descuento,estado;
+    private String razon_social,nif,direccion,contacto_principal,telefono,email,condicion_pago,descuento;
     protected String[] condiciones = {"Selecciona una opción","contado","30 días","60 días","90 días"};
-    protected String[] estadoArray = {"Selecciona una opción","activo","inactivo"};
     PreparedStatement preparedStatement;
     public void insertClientes(){
         try {
             abrirConexionDB();
-            String SQL = String.format("INSERT INTO %s (%s,%s,%s,%s,%s,%s,%s,%s,%s) VALUES(?,?,?,?,?,?,?,?,?)",
-                    SchemaDB.TAB_CLI,SchemaDB.COL_CLI_RS,SchemaDB.COL_CLI_NIF,SchemaDB.COL_CLI_DIR,SchemaDB.COL_CLI_CP,SchemaDB.COL_CLI_TEL,SchemaDB.COL_CLI_EMAIL,SchemaDB.COL_CLI_CONDICION,SchemaDB.COL_CLI_DESCUENTO,SchemaDB.COL_CLI_ESTADO);
+            String SQL = String.format("INSERT INTO %s (%s,%s,%s,%s,%s,%s,%s,%s) VALUES(?,?,?,?,?,?,?,?)",
+                    SchemaDB.TAB_CLI,SchemaDB.COL_CLI_RS,SchemaDB.COL_CLI_NIF,SchemaDB.COL_CLI_DIR,SchemaDB.COL_CLI_CP,SchemaDB.COL_CLI_TEL,SchemaDB.COL_CLI_EMAIL,SchemaDB.COL_CLI_CONDICION,SchemaDB.COL_CLI_DESCUENTO);
             preparedStatement = conexion.prepareStatement(SQL);
 
             razon_social = JOptionPane.showInputDialog("Razon Social: ");
@@ -75,25 +74,12 @@ public class insertClientes extends conexionDB {
             double descuento_aplicado =  Double.parseDouble(descuento);
             preparedStatement.setDouble(8,descuento_aplicado);
 
-            String arrayEstado =  (String) JOptionPane.showInputDialog(null,"","Condiciones de pago",
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    estadoArray,
-                    estadoArray[0]);
-            if (arrayEstado != null && arrayEstado != estadoArray[0]) {
-                estado = arrayEstado;
-            }else {
-                throw new eleccionIncorrecta();
-            }
-            preparedStatement.setString(9,estado);
-
             int fila = preparedStatement.executeUpdate();
             if (fila > 0) {
                 JOptionPane.showMessageDialog(null ,"Filas modificadas "+fila);
             }else {
                 JOptionPane.showMessageDialog(null ,"No se pudo modificar ninguna fila");
             }
-
         } catch (SQLException e) {
             if (e.getMessage().toLowerCase().contains("denied")) {
                 throw new sinPermisos();
