@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import database.*;
+import excepciones.comprobarCampoVacio;
+import excepciones.comprobarEmail;
+import excepciones.comprobarTelefono;
 import excepciones.sinPermisos;
 
 public class updateClientes extends conexionDB{
@@ -71,8 +74,26 @@ public class updateClientes extends conexionDB{
             String SQL = String.format("UPDATE %s SET %s = ? WHERE %s = ?",
                     SchemaDB.TAB_CLI,columnaMod,SchemaDB.COL_CLI_ID);
             preparedStatement = conexion.prepareStatement(SQL);
-            preparedStatement.setString(1,nuevoValor);
-            preparedStatement.setInt(2,id_final);
+            if (columnaMod.equals(SchemaDB.COL_CLI_TEL)){
+                if (nuevoValor == null || !nuevoValor.matches("^[0-9]{9}$")){
+                    throw new comprobarTelefono();
+                }else {
+                    preparedStatement.setString(1,nuevoValor);
+                    preparedStatement.setInt(2,id_final);
+                }
+            } else if (columnaMod.equals(SchemaDB.COL_CLI_EMAIL)) {
+                if (nuevoValor == null ||  !nuevoValor.contains("@")){
+                    throw new comprobarEmail();
+                }else {
+                    preparedStatement.setString(1,nuevoValor);
+                    preparedStatement.setInt(2,id_final);
+                }
+            } else if (nuevoValor != null){
+                preparedStatement.setString(1,nuevoValor);
+                preparedStatement.setInt(2,id_final);
+            } else {
+                throw new comprobarCampoVacio();
+            }
             int filas = preparedStatement.executeUpdate();
             JOptionPane.showMessageDialog(null ,"Filas modificadas "+filas);
 

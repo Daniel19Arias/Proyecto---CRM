@@ -43,14 +43,14 @@ public class insertClientes extends conexionDB {
             preparedStatement.setString(4,contacto_principal);
 
             telefono = JOptionPane.showInputDialog("Teléfono: ");
-            if (telefono.equals("")) {
-                throw new comprobarCampoVacio();
+            if (telefono == null || !telefono.matches("^[0-9]{9}$")) {
+                throw new comprobarTelefono();
             }
             preparedStatement.setString(5,telefono);
 
             email = JOptionPane.showInputDialog("Email: ");
-            if (!email.contains("@")) {
-                throw new comprobarEmail();
+            if (!email.contains("@")){
+                throw new  comprobarEmail();
             }
             preparedStatement.setString(6,email);
 

@@ -2,10 +2,7 @@ package sentenciasSQL.inserts;
 
 import javax.swing.*;
 import database.*;
-import excepciones.comprobarCampoVacio;
-import excepciones.comprobarEmail;
-import excepciones.eleccionIncorrecta;
-import excepciones.sinPermisos;
+import excepciones.*;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -34,8 +31,8 @@ public class insertLeads extends conexionDB {
             preparedStatement.setString(2,empresa);
 
             telefono = JOptionPane.showInputDialog("Teléfono: ");
-            if (telefono.equals("")){
-                throw new comprobarCampoVacio();
+            if (telefono == null || !telefono.matches("^[0-9]{9}$")) {
+                throw new comprobarTelefono();
             }
             preparedStatement.setString(3,telefono);
 

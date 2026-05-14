@@ -4,6 +4,7 @@ import javax.swing.*;
 import database.*;
 import excepciones.comprobarCampoVacio;
 import excepciones.comprobarEmail;
+import excepciones.comprobarTelefono;
 import excepciones.sinPermisos;
 
 import java.sql.PreparedStatement;
@@ -37,8 +38,8 @@ public class insertComerciales extends conexionDB {
             preparedStatement.setString(3,email);
 
             telefono = JOptionPane.showInputDialog("Teléfono: ");
-            if (telefono.equals("")) {
-                throw new comprobarCampoVacio();
+            if (telefono == null || !telefono.matches("^[0-9]{9}$")) {
+                throw new comprobarTelefono();
             }
             preparedStatement.setString(4,telefono);
 
