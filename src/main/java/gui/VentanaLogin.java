@@ -10,6 +10,7 @@ public class VentanaLogin extends JFrame {
     private JPasswordField password;
     private JLabel name,pwd;
     private int intentos = 0;
+    private final int maxIntentos = 3;
     public VentanaLogin() {
         setTitle("Iniciar Sesión - CRM ADROMI");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -49,7 +50,7 @@ public class VentanaLogin extends JFrame {
                 dispose();
             } else {
                 intentos++;
-                if (intentos >= 3) {
+                if (intentos >= maxIntentos) {
                     JOptionPane.showMessageDialog(null, "Sin intentos\nCerrando la app", "ERROR", JOptionPane.ERROR_MESSAGE);
                     System.exit(0);
                 } else {
