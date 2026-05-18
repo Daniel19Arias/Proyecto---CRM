@@ -35,7 +35,7 @@ public class selectInteracciones extends conexionDB {
                 Document doc = cursor.next();
                 
                 resultado += "ID Cliente SQL: " + doc.getInteger("id_cliente_sql") + "\n";
-                resultado += "Fecha: " + String.valueOf(doc.get("fecha")) + "\n";
+                resultado += "Fecha: " + doc.getString("fecha") + "\n";
                 resultado += "Tipo: " + doc.getString("tipo") + "\n";
                 resultado += "Comercial: " + doc.getString("comercial") + "\n";
                 resultado += "Comentario: " + doc.getString("comentario") + "\n";
