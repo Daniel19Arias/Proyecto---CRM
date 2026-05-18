@@ -4,20 +4,21 @@ import javax.swing.*;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import database.*;
+import excepciones.comprobarCampoVacio;
+import excepciones.comprobarEmail;
+import excepciones.comprobarTelefono;
 import excepciones.sinPermisos;
 
 public class updateClientes extends conexionDB{
     PreparedStatement preparedStatement;
-    String id;
-    int id_final;
+    int id;
     String opcionString;
     int opcion;
     String nuevoValor;
     public void updateClientes(){
         try {
             abrirConexionDB();
-            id = JOptionPane.showInputDialog("ID del cliente que deseas modificar: ");
-            id_final = Integer.parseInt(id);
+            id = Integer.parseInt(JOptionPane.showInputDialog("ID del cliente que deseas modificar: "));
 
             opcionString = JOptionPane.showInputDialog("Que columna deseas modificar\n" +
                     "1. Razon Social\n" +
@@ -28,8 +29,7 @@ public class updateClientes extends conexionDB{
                     "6. Email\n"+
                     "7. Condiciones de pago\n"+
                     "8. Descuento habitual\n"+
-                    "9. Estado\n"+
-                    "10. ID Comercial"
+                    "9. Estado"
                     );
             opcion = Integer.parseInt(opcionString);
 
@@ -62,17 +62,28 @@ public class updateClientes extends conexionDB{
                 case 9:
                     columnaMod = SchemaDB.COL_CLI_ESTADO;
                     break;
-                case 10:
-                    columnaMod = SchemaDB.COL_CLI_COM;
-                    break;
             }
             nuevoValor = JOptionPane.showInputDialog("Escribe el nuevo valor");
 
             String SQL = String.format("UPDATE %s SET %s = ? WHERE %s = ?",
                     SchemaDB.TAB_CLI,columnaMod,SchemaDB.COL_CLI_ID);
             preparedStatement = conexion.prepareStatement(SQL);
-            preparedStatement.setString(1,nuevoValor);
-            preparedStatement.setInt(2,id_final);
+            if (columnaMod.equals(SchemaDB.COL_CLI_TEL)){
+                if (nuevoValor == null || !nuevoValor.matches("^[0-9]{9}$")){
+                    throw new comprobarTelefono();
+                }
+                preparedStatement.setString(1,nuevoValor);
+            } else if (columnaMod.equals(SchemaDB.COL_CLI_EMAIL)) {
+                if (nuevoValor == null ||  !nuevoValor.contains("@")){
+                    throw new comprobarEmail();
+                }
+                preparedStatement.setString(1,nuevoValor);
+            } else if (nuevoValor != null){
+                preparedStatement.setString(1,nuevoValor);
+            }else {
+                    preparedStatement.setString(1,nuevoValor);
+            }
+            preparedStatement.setInt(2,id);
             int filas = preparedStatement.executeUpdate();
             JOptionPane.showMessageDialog(null ,"Filas modificadas "+filas);
 

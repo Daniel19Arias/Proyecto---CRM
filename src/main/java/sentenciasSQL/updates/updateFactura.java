@@ -8,7 +8,7 @@ import excepciones.sinPermisos;
 
 public class updateFactura extends conexionDB{
     PreparedStatement preparedStatement;
-    private String estado = "Cobrada";
+    private String estado = "cobrada";
     public void updateFactura(){
         try {
             abrirConexionDB();
