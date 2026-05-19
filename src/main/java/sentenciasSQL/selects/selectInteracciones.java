@@ -8,13 +8,14 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class selectInteracciones extends conexionDB {
 
     public void listarInteracciones() {
         MongoClient mongoClient = null;
         try {
-            // Abrir la conexión con MongoDB usando el método que añadimos a la clase padre
+            // Abrir la conexión con MongoDB usando el método de la clase padre
             mongoClient = abrirConexionMongo();
             if (mongoClient == null) {
                 JOptionPane.showMessageDialog(null, "No se pudo conectar a MongoDB", "Error", JOptionPane.ERROR_MESSAGE);
@@ -33,7 +34,7 @@ public class selectInteracciones extends conexionDB {
             // Recorrer los documentos y extraer la información
             while (cursor.hasNext()) {
                 Document doc = cursor.next();
-                
+
                 resultado += "ID Cliente SQL: " + doc.getInteger("id_cliente_sql") + "\n";
                 resultado += "Fecha: " + doc.getString("fecha") + "\n";
                 resultado += "Tipo: " + doc.getString("tipo") + "\n";
@@ -42,14 +43,25 @@ public class selectInteracciones extends conexionDB {
                 resultado += "------------------------------------------\n";
             }
 
-            // Mostrar el listado en un panel sencillo (JOptionPane) como el resto de selects
+            cursor.close();
+
+            // Mostrar el listado
             if (resultado.equals("--- LISTADO DE INTERACCIONES (MONGODB) ---\n\n")) {
                 JOptionPane.showMessageDialog(null, "No hay interacciones registradas.");
             } else {
-                JOptionPane.showMessageDialog(null, resultado);
-            }
+                /*Creamos el JTextArea con el resultado recopilado y declarando el tamaño( filas de alto y caracteres de ancho, y a partir de ahi
+                se activa el scroll)*/
 
-            cursor.close();
+                JTextArea textArea = new JTextArea(resultado, 35, 80);
+                textArea.setEditable(false);
+
+                // Creamos el scroll con su margen limpio
+                JScrollPane scroll = new JScrollPane(textArea);
+
+
+                // Se lo pasamos al JOptionPane
+                JOptionPane.showMessageDialog(null, scroll, "Listado de Interacciones", JOptionPane.INFORMATION_MESSAGE);
+            }
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al listar interacciones: " + e.getMessage(), "Error Mongo", JOptionPane.ERROR_MESSAGE);
