@@ -60,10 +60,11 @@ public class VentanaLogin extends JFrame {
             } else {
                 intentos++;
                 if (intentos >= maxIntentos) {
-                    JOptionPane.showMessageDialog(null, "Sin intentos\nCerrando la app", "ERROR", JOptionPane.ERROR_MESSAGE);
-                    System.exit(0);
+                    // SE USA EL MÉTODO SOBRECARGADO: Pasamos el mensaje y 'true' para cerrar la aplicación
+                    mostrarError("Sin intentos\nCerrando la app", true);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Nombre de usuario o contraseña incorrectos.\nIntentos restantes: " + (3 - intentos), "ERROR", JOptionPane.ERROR_MESSAGE);
+                    // SE USA EL MÉTODO NORMAL: Pasamos solo el mensaje, muestra el error pero deja continuar
+                    mostrarError("Nombre de usuario o contraseña incorrectos.\nIntentos restantes: " + (3 - intentos));
                     nombre.setText("");
                     password.setText("");
                 }
@@ -84,4 +85,21 @@ public class VentanaLogin extends JFrame {
         VentanaLogin ventanaLogin = new VentanaLogin();
         ventanaLogin.setVisible(true);
     }
+
+    // --- Aplicación de sobrecarga---
+    
+    // Método normal: Muestra un mensaje de error en pantalla sin cerrar el programa
+    public void mostrarError(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje, "ERROR", JOptionPane.ERROR_MESSAGE);
+    }
+
+    // Método sobrecargado: Hace lo mismo pero recibe un boolean adicional.
+    // Si 'cerrarApp' es true, además de mostrar el error, finaliza la ejecución del programa.
+    public void mostrarError(String mensaje, boolean cerrarApp) {
+        JOptionPane.showMessageDialog(this, mensaje, "ERROR", JOptionPane.ERROR_MESSAGE);
+        if (cerrarApp) {
+            System.exit(0);
+        }
+    }
+    // -------------------------------------------
 }
