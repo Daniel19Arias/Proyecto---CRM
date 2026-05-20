@@ -7,27 +7,31 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class selectFacturas extends conexionDB{
-    PreparedStatement preparedStatement;
-    public void selectFacturas(){
-        try{
+public class selectFacturas extends conexionDB {
+
+    // private: el PreparedStatement es un recurso interno de la operación; no debe exponerse fuera de la clase
+    private PreparedStatement preparedStatement;
+
+    // public: es el método que invoca VentanaCRUD al pulsar la opción del menú; debe ser accesible desde fuera
+    public void selectFacturas() {
+        try {
             abrirConexionDB();
             String SQL = String.format("Select * FROM %s",
                     SchemaDB.TAB_FAC);
             preparedStatement = conexion.prepareStatement(SQL);
             ResultSet rs = preparedStatement.executeQuery();
-            String facturas="";
-            while(rs.next()){
-                facturas += "ID: "+rs.getInt(SchemaDB.COL_FAC_ID)+" | "+
-                        "Num Factura: "+rs.getString(SchemaDB.COL_FAC_NUM)+" | "+
-                        "Fecha Emision: "+rs.getDate(SchemaDB.COL_FAC_EMISION)+" | "+
-                        "Fecha Vencimiento: "+ rs.getDate(SchemaDB.COL_FAC_VENCIMIENTO)+" | "+
-                        "ID Pedido: "+rs.getInt(SchemaDB.COL_FAC_PED)+" | "+
-                        "ID Cliente: "+rs.getInt(SchemaDB.COL_FAC_CLI)+" | "+
-                        "Base Imponible: "+rs.getDouble(SchemaDB.COL_FAC_BASE)+ " | "+
-                        "Tipo IVA: "+rs.getDouble(SchemaDB.COL_FAC_IVA)+ " | "+
-                        "Total factura: "+rs.getDouble(SchemaDB.COL_FAC_TOTAL)+" | "+
-                        "Estado: "+ rs.getString(SchemaDB.COL_FAC_ESTADO)+"\n";
+            String facturas = "";
+            while (rs.next()) {
+                facturas += "ID: " + rs.getInt(SchemaDB.COL_FAC_ID) + " | " +
+                        "Num Factura: " + rs.getString(SchemaDB.COL_FAC_NUM) + " | " +
+                        "Fecha Emision: " + rs.getDate(SchemaDB.COL_FAC_EMISION) + " | " +
+                        "Fecha Vencimiento: " + rs.getDate(SchemaDB.COL_FAC_VENCIMIENTO) + " | " +
+                        "ID Pedido: " + rs.getInt(SchemaDB.COL_FAC_PED) + " | " +
+                        "ID Cliente: " + rs.getInt(SchemaDB.COL_FAC_CLI) + " | " +
+                        "Base Imponible: " + rs.getDouble(SchemaDB.COL_FAC_BASE) + " | " +
+                        "Tipo IVA: " + rs.getDouble(SchemaDB.COL_FAC_IVA) + " | " +
+                        "Total factura: " + rs.getDouble(SchemaDB.COL_FAC_TOTAL) + " | " +
+                        "Estado: " + rs.getString(SchemaDB.COL_FAC_ESTADO) + "\n";
             }
             JOptionPane.showMessageDialog(null, facturas);
             rs.close();
@@ -37,7 +41,7 @@ public class selectFacturas extends conexionDB{
             } else {
                 JOptionPane.showMessageDialog(null, "Error de base de datos: " + e.getMessage(), "ERROR SQL", JOptionPane.ERROR_MESSAGE);
             }
-        }finally {
+        } finally {
             cerrarConexionBD();
         }
     }

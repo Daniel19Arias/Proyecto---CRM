@@ -6,14 +6,20 @@ import java.sql.SQLException;
 import database.*;
 import excepciones.sinPermisos;
 
-public class updatePedido extends conexionDB{
-    PreparedStatement preparedStatement;
-    String id;
-    int id_final;
-    String opcionString;
-    int opcion;
-    String nuevoValor;
-    public void updatePedido(){
+public class updatePedido extends conexionDB {
+
+    // private: el PreparedStatement es un recurso interno de la operación; no debe exponerse fuera de la clase
+    private PreparedStatement preparedStatement;
+
+    // private: variables de trabajo internas del flujo de actualización; ninguna clase externa necesita acceso a ellas
+    private String id;
+    private int id_final;
+    private String opcionString;
+    private int opcion;
+    private String nuevoValor;
+
+    // public: es el método que invoca VentanaCRUD al pulsar la opción del menú; debe ser accesible desde fuera
+    public void updatePedido() {
         try {
             abrirConexionDB();
             id = JOptionPane.showInputDialog("ID del pedido que deseas modificar: ");
@@ -28,7 +34,7 @@ public class updatePedido extends conexionDB{
             opcion = Integer.parseInt(opcionString);
 
             String columnaMod = "";
-            switch (opcion){
+            switch (opcion) {
                 case 1:
                     columnaMod = SchemaDB.COL_PED_FECHA;
                     break;
@@ -45,12 +51,12 @@ public class updatePedido extends conexionDB{
             nuevoValor = JOptionPane.showInputDialog("Escribe el nuevo valor");
 
             String SQL = String.format("UPDATE %s SET %s = ? WHERE %s = ?",
-                    SchemaDB.TAB_PED,columnaMod,SchemaDB.COL_PED_ID);
+                    SchemaDB.TAB_PED, columnaMod, SchemaDB.COL_PED_ID);
             preparedStatement = conexion.prepareStatement(SQL);
-            preparedStatement.setString(1,nuevoValor);
-            preparedStatement.setInt(2,id_final);
+            preparedStatement.setString(1, nuevoValor);
+            preparedStatement.setInt(2, id_final);
             int filas = preparedStatement.executeUpdate();
-            JOptionPane.showMessageDialog(null ,"Filas modificadas "+filas);
+            JOptionPane.showMessageDialog(null, "Filas modificadas " + filas);
 
         } catch (SQLException e) {
             if (e.getMessage().toLowerCase().contains("denied")) {
@@ -58,8 +64,7 @@ public class updatePedido extends conexionDB{
             } else {
                 JOptionPane.showMessageDialog(null, "Error de base de datos: " + e.getMessage(), "ERROR SQL", JOptionPane.ERROR_MESSAGE);
             }
-        }
-        finally {
+        } finally {
             cerrarConexionBD();
         }
     }

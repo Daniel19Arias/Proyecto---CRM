@@ -7,22 +7,26 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class selectPedidos extends conexionDB{
-    PreparedStatement preparedStatement;
-    public void selectPedidos(){
-        try{
+public class selectPedidos extends conexionDB {
+
+    // private: el PreparedStatement es un recurso interno de la operación; no debe exponerse fuera de la clase
+    private PreparedStatement preparedStatement;
+
+    // public: es el método que invoca VentanaCRUD al pulsar la opción del menú; debe ser accesible desde fuera
+    public void selectPedidos() {
+        try {
             abrirConexionDB();
             String SQL = String.format("Select * FROM %s",
                     SchemaDB.TAB_PED);
             preparedStatement = conexion.prepareStatement(SQL);
             ResultSet rs = preparedStatement.executeQuery();
-            String pedidos="";
-            while(rs.next()){
-                pedidos += "ID: "+rs.getInt(SchemaDB.COL_PED_ID)+" | "+
-                        "Fecha Pedido: "+rs.getDate(SchemaDB.COL_PED_FECHA)+" | "+
-                        "Estado: "+rs.getString(SchemaDB.COL_PED_EST)+" | "+
-                        "ID cliente: "+rs.getInt(SchemaDB.COL_PED_CLI)+" | "+
-                        "ID Comercial: "+rs.getInt(SchemaDB.COL_PED_COM)+"\n";
+            String pedidos = "";
+            while (rs.next()) {
+                pedidos += "ID: " + rs.getInt(SchemaDB.COL_PED_ID) + " | " +
+                        "Fecha Pedido: " + rs.getDate(SchemaDB.COL_PED_FECHA) + " | " +
+                        "Estado: " + rs.getString(SchemaDB.COL_PED_EST) + " | " +
+                        "ID cliente: " + rs.getInt(SchemaDB.COL_PED_CLI) + " | " +
+                        "ID Comercial: " + rs.getInt(SchemaDB.COL_PED_COM) + "\n";
             }
             JOptionPane.showMessageDialog(null, pedidos);
             rs.close();
@@ -32,7 +36,7 @@ public class selectPedidos extends conexionDB{
             } else {
                 JOptionPane.showMessageDialog(null, "Error de base de datos: " + e.getMessage(), "ERROR SQL", JOptionPane.ERROR_MESSAGE);
             }
-        }finally {
+        } finally {
             cerrarConexionBD();
         }
     }

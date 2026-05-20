@@ -8,70 +8,80 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class insertLeads extends conexionDB {
-    private String nombre,empresa,telefono,email,fuente,estado;
-    public String[] opcionesFuente = {"Seleccione una opción","Pagina Web", "Linkedin", "Feria Sectorial", "Instagram Ads", "Google Search", "Llamada en frio"};
-    protected String[] opcionEstado = {"Seleccione una opción", "Nuevo","En seguimiento","Perdido"};
-    PreparedStatement preparedStatement;
-    public void insertLeads(){
+
+    // private: datos que el usuario introduce para este insert; solo los gestiona esta clase
+    private String nombre, empresa, telefono, email, fuente, estado;
+
+    // private: arrays de opciones fijos de esta clase para los menús desplegables;
+    // no tiene sentido que sean accesibles desde fuera, son configuración interna
+    private String[] opcionesFuente = {"Seleccione una opción", "Pagina Web", "Linkedin", "Feria Sectorial", "Instagram Ads", "Google Search", "Llamada en frio"};
+    private String[] opcionEstado = {"Seleccione una opción", "Nuevo", "En seguimiento", "Perdido"};
+
+    // private: el PreparedStatement es un recurso interno de la operación; no debe exponerse fuera de la clase
+    private PreparedStatement preparedStatement;
+
+    // public: es el método que invoca VentanaCRUD al pulsar la opción del menú; debe ser accesible desde fuera
+    public void insertLeads() {
         try {
             abrirConexionDB();
             String SQL = String.format("INSERT INTO %s (%s,%s,%s,%s,%s,%s) VALUES(?,?,?,?,?,?)",
-                    SchemaDB.TAB_LEADS,SchemaDB.COL_LEADS_NOM,SchemaDB.COL_LEADS_EMP,SchemaDB.COL_LEADS_TEL,SchemaDB.COL_LEADS_EMAIL,SchemaDB.COL_LEADS_FUENTE,SchemaDB.COL_LEADS_EST);
+                    SchemaDB.TAB_LEADS, SchemaDB.COL_LEADS_NOM, SchemaDB.COL_LEADS_EMP, SchemaDB.COL_LEADS_TEL, SchemaDB.COL_LEADS_EMAIL, SchemaDB.COL_LEADS_FUENTE, SchemaDB.COL_LEADS_EST);
             preparedStatement = conexion.prepareStatement(SQL);
+
             nombre = JOptionPane.showInputDialog("Nombre");
-            if (nombre.equals("")){
+            if (nombre.equals("")) {
                 throw new comprobarCampoVacio();
             }
-            preparedStatement.setString(1,nombre);
+            preparedStatement.setString(1, nombre);
 
             empresa = JOptionPane.showInputDialog("Empresa: ");
-            if (empresa.equals("")){
+            if (empresa.equals("")) {
                 throw new comprobarCampoVacio();
             }
-            preparedStatement.setString(2,empresa);
+            preparedStatement.setString(2, empresa);
 
             telefono = JOptionPane.showInputDialog("Teléfono: ");
             if (telefono == null || !telefono.matches("^[0-9]{9}$")) {
                 throw new comprobarTelefono();
             }
-            preparedStatement.setString(3,telefono);
+            preparedStatement.setString(3, telefono);
 
             email = JOptionPane.showInputDialog("Email: ");
-            if (!email.contains("@")){
+            if (!email.contains("@")) {
                 throw new comprobarEmail();
             }
-            preparedStatement.setString(4,email);
+            preparedStatement.setString(4, email);
 
             String eleccion = (String) JOptionPane.showInputDialog(null,
-                    "","Fuente de Captación",
+                    "", "Fuente de Captación",
                     JOptionPane.QUESTION_MESSAGE,
                     null,
                     opcionesFuente,
                     opcionesFuente[0]);
             if (eleccion != null && eleccion != opcionesFuente[0]) {
                 fuente = eleccion;
-            }else {
+            } else {
                 throw new eleccionIncorrecta();
             }
-            preparedStatement.setString(5,fuente);
+            preparedStatement.setString(5, fuente);
 
-            String opcion = (String) JOptionPane.showInputDialog(null, "","Menú opción estado",
+            String opcion = (String) JOptionPane.showInputDialog(null, "", "Menú opción estado",
                     JOptionPane.QUESTION_MESSAGE,
                     null,
                     opcionEstado,
                     opcionEstado[0]);
             if (opcion != null && opcion != opcionEstado[0]) {
                 estado = opcion;
-            }else {
+            } else {
                 throw new eleccionIncorrecta();
             }
-            preparedStatement.setString(6,estado);
+            preparedStatement.setString(6, estado);
 
             int fila = preparedStatement.executeUpdate();
             if (fila > 0) {
-                JOptionPane.showMessageDialog(null ,"Lead insertado correctamente, Filas modificadas "+fila);
-            }else {
-                JOptionPane.showMessageDialog(null ,"Error al insertar lead","ERROR",JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Lead insertado correctamente, Filas modificadas " + fila);
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al insertar lead", "ERROR", JOptionPane.ERROR_MESSAGE);
             }
 
         } catch (SQLException e) {
@@ -80,7 +90,7 @@ public class insertLeads extends conexionDB {
             } else {
                 JOptionPane.showMessageDialog(null, "Error de base de datos: " + e.getMessage(), "ERROR SQL", JOptionPane.ERROR_MESSAGE);
             }
-        }finally {
+        } finally {
             cerrarConexionBD();
         }
     }

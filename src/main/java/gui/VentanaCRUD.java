@@ -9,10 +9,17 @@ import sentenciasSQL.procedures.*;
 import javax.swing.*;
 
 public class VentanaCRUD extends JFrame {
-    protected JMenuBar menuPrincipal =  new JMenuBar();
-    protected JMenu leads,cliente,comercial,detalle_pedido,factura,pedido,producto,interacciones,salir;
-    protected JMenuItem select,insert,delete,update,cerrarSesion,procedure;
-    public VentanaCRUD(){
+
+    // private: la barra de menú y los menús son componentes visuales internos de esta ventana;
+    // no hay ninguna clase externa que deba acceder a ellos directamente
+    private JMenuBar menuPrincipal = new JMenuBar();
+    private JMenu leads, cliente, comercial, detalle_pedido, factura, pedido, producto, interacciones, salir;
+
+    // private: los JMenuItem son reutilizados localmente dentro del constructor para construir cada menú;
+    // son referencias temporales internas, ninguna clase los usa
+    private JMenuItem select, insert, delete, update, cerrarSesion, procedure;
+
+    public VentanaCRUD() {
         setTitle("CRM - AdromiTech");
         setSize(600, 400);
         setResizable(false);
@@ -21,19 +28,19 @@ public class VentanaCRUD extends JFrame {
         setLocationRelativeTo(null);
 
         leads = new JMenu("Leads");
-        cliente =  new JMenu("Clientes");
-        comercial =  new JMenu("Comerciales");
-        detalle_pedido =  new JMenu("Detalle de pedido");
+        cliente = new JMenu("Clientes");
+        comercial = new JMenu("Comerciales");
+        detalle_pedido = new JMenu("Detalle de pedido");
         factura = new JMenu("Facturas");
         pedido = new JMenu("Pedidos");
         producto = new JMenu("Productos");
         interacciones = new JMenu("Interacciones");
         salir = new JMenu("Salir");
 
-        select = new  JMenuItem("Listar Leads");
-        insert  = new JMenuItem("Insertar Leads");
-        delete  = new JMenuItem("Eliminar Leads");
-        update  = new JMenuItem("Actualizar Leads");
+        select = new JMenuItem("Listar Leads");
+        insert = new JMenuItem("Insertar Leads");
+        delete = new JMenuItem("Eliminar Leads");
+        update = new JMenuItem("Actualizar Leads");
         procedure = new JMenuItem("Convertir Lead a Cliente");
         leads.add(select);
         leads.add(insert);
@@ -72,8 +79,8 @@ public class VentanaCRUD extends JFrame {
         cliente.add(update);
         menuPrincipal.add(cliente);
         select.addActionListener(e -> {
-           selectClientes selectClientes = new selectClientes();
-           selectClientes.selectClientes();
+            selectClientes selectClientes = new selectClientes();
+            selectClientes.selectClientes();
         });
         insert.addActionListener(e -> {
             insertClientes insertClientes = new insertClientes();
@@ -98,26 +105,26 @@ public class VentanaCRUD extends JFrame {
         comercial.add(update);
         menuPrincipal.add(comercial);
         select.addActionListener(e -> {
-           selectComerciales selectComerciales = new selectComerciales();
-           selectComerciales.selectComerciales();
+            selectComerciales selectComerciales = new selectComerciales();
+            selectComerciales.selectComerciales();
         });
         insert.addActionListener(e -> {
             insertComerciales insertComerciales = new insertComerciales();
             insertComerciales.insertComerciales();
         });
         delete.addActionListener(e -> {
-           deleteComercial deletecomercial = new  deleteComercial();
-           deletecomercial.deleteComercial();
+            deleteComercial deletecomercial = new deleteComercial();
+            deletecomercial.deleteComercial();
         });
         update.addActionListener(e -> {
             updateComercial updateComercial = new updateComercial();
             updateComercial.updateComercial();
         });
 
-        select =  new JMenuItem("Listar Facturas");
+        select = new JMenuItem("Listar Facturas");
         delete = new JMenuItem("Eliminar Factura");
         update = new JMenuItem("Cobrar Factura");
-        procedure = new  JMenuItem("Generar Factura");
+        procedure = new JMenuItem("Generar Factura");
         factura.add(select);
         factura.add(delete);
         factura.add(update);
@@ -128,16 +135,16 @@ public class VentanaCRUD extends JFrame {
             selectFacturas.selectFacturas();
         });
         delete.addActionListener(e -> {
-           deleteFacturas deleteFacturas = new deleteFacturas();
-           deleteFacturas.deleteFacturas();
+            deleteFacturas deleteFacturas = new deleteFacturas();
+            deleteFacturas.deleteFacturas();
         });
         update.addActionListener(e -> {
             updateFactura updateFactura = new updateFactura();
             updateFactura.updateFactura();
         });
         procedure.addActionListener(e -> {
-           procedureGenerarFactura procedureGenerarFactura = new procedureGenerarFactura();
-           procedureGenerarFactura.procedureGenerarFactura();
+            procedureGenerarFactura procedureGenerarFactura = new procedureGenerarFactura();
+            procedureGenerarFactura.procedureGenerarFactura();
         });
 
         select = new JMenuItem("Listar Pedidos");
@@ -154,7 +161,6 @@ public class VentanaCRUD extends JFrame {
             deletePedido.deletePedido();
         });
 
-
         select = new JMenuItem("Listar Productos");
         insert = new JMenuItem("Insertar Producto");
         delete = new JMenuItem("Eliminar Producto");
@@ -169,16 +175,16 @@ public class VentanaCRUD extends JFrame {
             selectProductos.selectProductos();
         });
         insert.addActionListener(e -> {
-           insertProductos insertProductos = new insertProductos();
-           insertProductos.insertProductos();
+            insertProductos insertProductos = new insertProductos();
+            insertProductos.insertProductos();
         });
         delete.addActionListener(e -> {
-           deleteProducto deleteProducto = new deleteProducto();
-           deleteProducto.deleteProducto();
+            deleteProducto deleteProducto = new deleteProducto();
+            deleteProducto.deleteProducto();
         });
         update.addActionListener(e -> {
-           updateProducto updateProducto = new  updateProducto();
-           updateProducto.updateProducto();
+            updateProducto updateProducto = new updateProducto();
+            updateProducto.updateProducto();
         });
 
         select = new JMenuItem("Listar Interacciones");
@@ -195,7 +201,8 @@ public class VentanaCRUD extends JFrame {
         cerrarSesion.addActionListener(e -> {
             VentanaLogin ventanaLogin = new VentanaLogin();
             ventanaLogin.setVisible(true);
-            dispose();        });
+            dispose();
+        });
 
         setJMenuBar(menuPrincipal);
     }

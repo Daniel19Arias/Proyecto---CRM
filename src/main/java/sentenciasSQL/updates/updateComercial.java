@@ -8,23 +8,28 @@ import excepciones.comprobarEmail;
 import excepciones.comprobarTelefono;
 import excepciones.sinPermisos;
 
-public class updateComercial extends conexionDB{
-    PreparedStatement preparedStatement;
-    int id;
-    String opcionString;
-    int opcion;
-    String nuevoValor;
-    public void updateComercial(){
+public class updateComercial extends conexionDB {
+
+    // private: el PreparedStatement es un recurso interno de la operación; no debe exponerse fuera de la clase
+    private PreparedStatement preparedStatement;
+
+    // private: variables de trabajo internas del flujo de actualización; ninguna clase externa necesita acceso a ellas
+    private int id;
+    private String opcionString;
+    private int opcion;
+    private String nuevoValor;
+
+    // public: es el método que invoca VentanaCRUD al pulsar la opción del menú; debe ser accesible desde fuera
+    public void updateComercial() {
         try {
             abrirConexionDB();
             id = Integer.parseInt(JOptionPane.showInputDialog("ID del comercial que deseas modificar: "));
 
-
             opcionString = JOptionPane.showInputDialog("Que columna deseas modificar\n" +
-                    "1. Nombre\n"+
-                    "2. Apellidos\n"+
-                    "3. Email\n"+
-                    "4. Teléfono\n"+
+                    "1. Nombre\n" +
+                    "2. Apellidos\n" +
+                    "3. Email\n" +
+                    "4. Teléfono\n" +
                     "5. Zona Geográfica"
             );
             opcion = Integer.parseInt(opcionString);
@@ -50,25 +55,25 @@ public class updateComercial extends conexionDB{
             nuevoValor = JOptionPane.showInputDialog("Escribe el nuevo valor");
 
             String SQL = String.format("UPDATE %s SET %s = ? WHERE %s = ?",
-                    SchemaDB.TAB_COMER,columnaMod,SchemaDB.COL_COMER_ID);
+                    SchemaDB.TAB_COMER, columnaMod, SchemaDB.COL_COMER_ID);
             preparedStatement = conexion.prepareStatement(SQL);
-            if (columnaMod.equals(SchemaDB.COL_COMER_TELEFONO)){
-                if (nuevoValor == null || !nuevoValor.matches("^[0-9]{9}$")){
+            if (columnaMod.equals(SchemaDB.COL_COMER_TELEFONO)) {
+                if (nuevoValor == null || !nuevoValor.matches("^[0-9]{9}$")) {
                     throw new comprobarTelefono();
                 }
-                preparedStatement.setString(1,nuevoValor);
-            } else if (columnaMod.equals(SchemaDB.COL_COMER_EMAIL)){
-                if (nuevoValor == null || !nuevoValor.contains("@")){
+                preparedStatement.setString(1, nuevoValor);
+            } else if (columnaMod.equals(SchemaDB.COL_COMER_EMAIL)) {
+                if (nuevoValor == null || !nuevoValor.contains("@")) {
                     throw new comprobarEmail();
                 }
-                preparedStatement.setString(1,nuevoValor);
-            }else {
-                preparedStatement.setString(1,nuevoValor);
+                preparedStatement.setString(1, nuevoValor);
+            } else {
+                preparedStatement.setString(1, nuevoValor);
             }
-            preparedStatement.setInt(2,id);
+            preparedStatement.setInt(2, id);
 
             int filas = preparedStatement.executeUpdate();
-            JOptionPane.showMessageDialog(null ,"Filas modificadas "+filas);
+            JOptionPane.showMessageDialog(null, "Filas modificadas " + filas);
 
         } catch (SQLException e) {
             if (e.getMessage().toLowerCase().contains("denied")) {
@@ -76,8 +81,7 @@ public class updateComercial extends conexionDB{
             } else {
                 JOptionPane.showMessageDialog(null, "Error de base de datos: " + e.getMessage(), "ERROR SQL", JOptionPane.ERROR_MESSAGE);
             }
-        }
-        finally {
+        } finally {
             cerrarConexionBD();
         }
     }

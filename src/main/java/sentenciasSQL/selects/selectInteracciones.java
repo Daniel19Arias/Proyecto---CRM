@@ -12,6 +12,7 @@ import java.awt.*;
 
 public class selectInteracciones extends conexionDB {
 
+    // public: es el método que invoca VentanaCRUD al pulsar la opción del menú; debe ser accesible desde fuera
     public void listarInteracciones() {
         MongoClient mongoClient = null;
         try {
@@ -49,15 +50,12 @@ public class selectInteracciones extends conexionDB {
             if (resultado.equals("--- LISTADO DE INTERACCIONES (MONGODB) ---\n\n")) {
                 JOptionPane.showMessageDialog(null, "No hay interacciones registradas.");
             } else {
-                /*Creamos el JTextArea con el resultado recopilado y declarando el tamaño( filas de alto y caracteres de ancho, y a partir de ahi
-                se activa el scroll)*/
-
+                // Creamos el JTextArea con el resultado recopilado
                 JTextArea textArea = new JTextArea(resultado, 35, 80);
                 textArea.setEditable(false);
 
                 // Creamos el scroll con su margen limpio
                 JScrollPane scroll = new JScrollPane(textArea);
-
 
                 // Se lo pasamos al JOptionPane
                 JOptionPane.showMessageDialog(null, scroll, "Listado de Interacciones", JOptionPane.INFORMATION_MESSAGE);

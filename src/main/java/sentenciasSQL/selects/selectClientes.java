@@ -10,28 +10,31 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class selectClientes extends conexionDB {
-    PreparedStatement preparedStatement;
 
+    // private: el PreparedStatement es un recurso interno de la operación; no debe exponerse fuera de la clase
+    private PreparedStatement preparedStatement;
+
+    // public: es el método que invoca VentanaCRUD al pulsar la opción del menú; debe ser accesible desde fuera
     public void selectClientes() {
         try {
             abrirConexionDB();
-            String SQL = String.format("SELECT %s, %s, %s, %s, %s, %s, %s FROM %s", 
-                    SchemaDB.COL_CLI_ID, SchemaDB.COL_CLI_RS, SchemaDB.COL_CLI_NIF, 
-                    SchemaDB.COL_CLI_CP, SchemaDB.COL_CLI_TEL, SchemaDB.COL_CLI_EMAIL, 
+            String SQL = String.format("SELECT %s, %s, %s, %s, %s, %s, %s FROM %s",
+                    SchemaDB.COL_CLI_ID, SchemaDB.COL_CLI_RS, SchemaDB.COL_CLI_NIF,
+                    SchemaDB.COL_CLI_CP, SchemaDB.COL_CLI_TEL, SchemaDB.COL_CLI_EMAIL,
                     SchemaDB.COL_CLI_ESTADO, SchemaDB.TAB_CLI);
             preparedStatement = conexion.prepareStatement(SQL);
             ResultSet rs = preparedStatement.executeQuery();
 
-            // Definir las columnas de la tabla 
+            // Definir las columnas de la tabla
             String[] columnas = {
                 "ID", "Razón Social", "NIF", "Contacto", "Teléfono", "Email", "Estado"
             };
 
-            //Crear el modelo de la tabla. Mete el array de las columnas de arriba al modelo. El 0 es el numero de filas iniciales, ponemos 0 porque se rellenan despues
+            // Crear el modelo de la tabla
             DefaultTableModel modelo = new DefaultTableModel(columnas, 0) {
                 public boolean isCellEditable(int row, int col) {
-                    return false;
-                } // esto hace que no se pueda editar ningun campo de la tabla, si no se pusiese, se editaria
+                    return false; // hace que no se pueda editar ningún campo de la tabla
+                }
             };
 
             // Rellenar el modelo con los datos del ResultSet
@@ -52,27 +55,25 @@ public class selectClientes extends conexionDB {
             tabla.setRowHeight(35);
             tabla.setFont(new Font("Segoe UI", Font.PLAIN, 14));
             tabla.setGridColor(new Color(230, 230, 230));
-            tabla.setShowVerticalLines(false); // Estilo moderno sin líneas verticales
-            tabla.setSelectionBackground(new Color(220, 237, 255)); // Color azul claro al seleccionar
+            tabla.setShowVerticalLines(false);
+            tabla.setSelectionBackground(new Color(220, 237, 255));
             tabla.setSelectionForeground(Color.BLACK);
 
-            //Estilizar el encabezado de la tabla
+            // Estilizar el encabezado de la tabla
             JTableHeader header = tabla.getTableHeader();
             header.setFont(new Font("Segoe UI", Font.BOLD, 13));
-            header.setBackground(new Color(45, 85, 150)); // Azul corporativo
+            header.setBackground(new Color(45, 85, 150));
             header.setForeground(Color.WHITE);
             header.setPreferredSize(new Dimension(0, 40));
 
-            // Crear la ventana (JFrame) para mostrar la tabla
+            // Crear la ventana para mostrar la tabla
             JFrame ventana = new JFrame("Listado de clientes");
-            ventana.setSize(1100, 600); // Tamaño amplio para ver todos los campos
+            ventana.setSize(1100, 600);
             ventana.setLocationRelativeTo(null);
-            
-            // Envolver la tabla en un scroll con margen
+
             JScrollPane scroll = new JScrollPane(tabla);
-            scroll.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); 
-            //se crea un borde blanco alrededor de la tabla para q no se vea pegada a los bordes del panel
-            
+            scroll.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
             ventana.add(scroll);
             ventana.setVisible(true);
 

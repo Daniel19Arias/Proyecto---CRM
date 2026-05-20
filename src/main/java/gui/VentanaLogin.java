@@ -4,46 +4,55 @@ import javax.swing.*;
 import database.*;
 
 public class VentanaLogin extends JFrame {
-    protected conexionDB conexion = new  conexionDB();
-    private JButton bIniciarSesion,bCancelar;
+
+    // Se pone protected para que si se crease una subclase de VentanaLogin pudiera reutilizar la conexión
+    protected conexionDB conexion = new conexionDB();
+
+    // private: componentes visuales propios de esta ventana; ninguna clase externa ni subclase debe manipularlos
+    private JButton bIniciarSesion, bCancelar;
     private JTextField nombre;
     private JPasswordField password;
-    private JLabel name,pwd;
+    private JLabel name, pwd;
+
+    // private: el contador de intentos es estado interno de esta ventana; no debe exponerse fuera
     private int intentos = 0;
+
+    // private final: constante interna de esta ventana; no tiene sentido que sea visible desde fuera
     private final int maxIntentos = 3;
+
     public VentanaLogin() {
         setTitle("Iniciar Sesión - CRM ADROMI");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400,250);
+        setSize(400, 250);
         setResizable(false);
         setLocationRelativeTo(null);
         setLayout(null);
 
         name = new JLabel("Nombre de usuario");
-        name.setBounds(50,30,150,35);
+        name.setBounds(50, 30, 150, 35);
         add(name);
 
         nombre = new JTextField();
-        nombre.setBounds(200,30,150,35);
+        nombre.setBounds(200, 30, 150, 35);
         add(nombre);
 
         pwd = new JLabel("Contraseña");
-        pwd.setBounds(50,80,150,35);
+        pwd.setBounds(50, 80, 150, 35);
         add(pwd);
 
         password = new JPasswordField();
-        password.setBounds(200,80,150,35);
+        password.setBounds(200, 80, 150, 35);
         add(password);
 
         bIniciarSesion = new JButton("Iniciar Sesión");
-        bIniciarSesion.setBounds(30,150,150,30);
+        bIniciarSesion.setBounds(30, 150, 150, 30);
         bIniciarSesion.setFocusPainted(false);
         add(bIniciarSesion);
         bIniciarSesion.addActionListener(e -> {
             String username = nombre.getText();
             String pass = String.valueOf(password.getPassword());
 
-            if(conexion.validarCredenciales(username, pass)) {
+            if (conexion.validarCredenciales(username, pass)) {
                 intentos = 0;
                 VentanaCRUD ventanaCRUD = new VentanaCRUD();
                 ventanaCRUD.setVisible(true);
@@ -62,13 +71,15 @@ public class VentanaLogin extends JFrame {
         });
 
         bCancelar = new JButton("Cancelar");
-        bCancelar.setBounds(200,150,150,30);
+        bCancelar.setBounds(200, 150, 150, 30);
         bCancelar.setFocusPainted(false);
         add(bCancelar);
         bCancelar.addActionListener(e -> {
             System.exit(0);
         });
     }
+
+    // public: es el punto de entrada de la aplicación; debe ser accesible
     public static void main(String[] args) {
         VentanaLogin ventanaLogin = new VentanaLogin();
         ventanaLogin.setVisible(true);

@@ -9,13 +9,19 @@ import excepciones.comprobarEmail;
 import excepciones.comprobarTelefono;
 import excepciones.sinPermisos;
 
-public class updateClientes extends conexionDB{
-    PreparedStatement preparedStatement;
-    int id;
-    String opcionString;
-    int opcion;
-    String nuevoValor;
-    public void updateClientes(){
+public class updateClientes extends conexionDB {
+
+    // private: el PreparedStatement es un recurso interno de la operación; no debe exponerse fuera de la clase
+    private PreparedStatement preparedStatement;
+
+    // private: variables de trabajo internas del flujo de actualización; ninguna clase externa necesita acceso a ellas
+    private int id;
+    private String opcionString;
+    private int opcion;
+    private String nuevoValor;
+
+    // public: es el método que invoca VentanaCRUD al pulsar la opción del menú; debe ser accesible desde fuera
+    public void updateClientes() {
         try {
             abrirConexionDB();
             id = Integer.parseInt(JOptionPane.showInputDialog("ID del cliente que deseas modificar: "));
@@ -24,17 +30,17 @@ public class updateClientes extends conexionDB{
                     "1. Razon Social\n" +
                     "2. NIF\n" +
                     "3. Dirección Fiscal\n" +
-                    "4. Contacto Principal\n"+
-                    "5. Teléfono\n"+
-                    "6. Email\n"+
-                    "7. Condiciones de pago\n"+
-                    "8. Descuento habitual\n"+
+                    "4. Contacto Principal\n" +
+                    "5. Teléfono\n" +
+                    "6. Email\n" +
+                    "7. Condiciones de pago\n" +
+                    "8. Descuento habitual\n" +
                     "9. Estado"
-                    );
+            );
             opcion = Integer.parseInt(opcionString);
 
             String columnaMod = "";
-            switch (opcion){
+            switch (opcion) {
                 case 1:
                     columnaMod = SchemaDB.COL_CLI_RS;
                     break;
@@ -66,26 +72,26 @@ public class updateClientes extends conexionDB{
             nuevoValor = JOptionPane.showInputDialog("Escribe el nuevo valor");
 
             String SQL = String.format("UPDATE %s SET %s = ? WHERE %s = ?",
-                    SchemaDB.TAB_CLI,columnaMod,SchemaDB.COL_CLI_ID);
+                    SchemaDB.TAB_CLI, columnaMod, SchemaDB.COL_CLI_ID);
             preparedStatement = conexion.prepareStatement(SQL);
-            if (columnaMod.equals(SchemaDB.COL_CLI_TEL)){
-                if (nuevoValor == null || !nuevoValor.matches("^[0-9]{9}$")){
+            if (columnaMod.equals(SchemaDB.COL_CLI_TEL)) {
+                if (nuevoValor == null || !nuevoValor.matches("^[0-9]{9}$")) {
                     throw new comprobarTelefono();
                 }
-                preparedStatement.setString(1,nuevoValor);
+                preparedStatement.setString(1, nuevoValor);
             } else if (columnaMod.equals(SchemaDB.COL_CLI_EMAIL)) {
-                if (nuevoValor == null ||  !nuevoValor.contains("@")){
+                if (nuevoValor == null || !nuevoValor.contains("@")) {
                     throw new comprobarEmail();
                 }
-                preparedStatement.setString(1,nuevoValor);
-            } else if (nuevoValor != null){
-                preparedStatement.setString(1,nuevoValor);
-            }else {
-                    preparedStatement.setString(1,nuevoValor);
+                preparedStatement.setString(1, nuevoValor);
+            } else if (nuevoValor != null) {
+                preparedStatement.setString(1, nuevoValor);
+            } else {
+                preparedStatement.setString(1, nuevoValor);
             }
-            preparedStatement.setInt(2,id);
+            preparedStatement.setInt(2, id);
             int filas = preparedStatement.executeUpdate();
-            JOptionPane.showMessageDialog(null ,"Filas modificadas "+filas);
+            JOptionPane.showMessageDialog(null, "Filas modificadas " + filas);
 
         } catch (SQLException e) {
             if (e.getMessage().toLowerCase().contains("denied")) {
@@ -93,8 +99,7 @@ public class updateClientes extends conexionDB{
             } else {
                 JOptionPane.showMessageDialog(null, "Error de base de datos: " + e.getMessage(), "ERROR SQL", JOptionPane.ERROR_MESSAGE);
             }
-        }
-        finally {
+        } finally {
             cerrarConexionBD();
         }
     }

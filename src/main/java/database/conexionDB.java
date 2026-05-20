@@ -11,10 +11,14 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 
 public class conexionDB {
+
+    // protected: las subclases (inserts, selects, etc.) necesitan acceder a 'conexion' directamente para preparar statements
     protected Connection conexion;
+
+    // private: solo esta clase carga y gestiona las propiedades; ninguna subclase necesita acceder a ellas
     private Properties propiedades;
 
-    // Variables estáticas para recordar quién inició sesión en toda la app
+    // public static: son las credenciales globales de sesión que deben ser accesibles desde cualquier clase del programa
     public static String usuarioNativo;
     public static String passwordNativa;
 
@@ -23,6 +27,7 @@ public class conexionDB {
         cargarPropiedades();
     }
 
+    // private: método auxiliar interno que solo llama el constructor; no debe ser accesible ni sobreescrito
     private void cargarPropiedades() {
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("db.properties")) {
             if (input != null) propiedades.load(input);
@@ -31,45 +36,33 @@ public class conexionDB {
         }
     }
 
-    // --- NUEVO MÉTODO DE VALIDACIÓN NATIVA ---
+    // public: debe ser llamado desde VentanaLogin para validar el usuario al iniciar sesión
     public boolean validarCredenciales(String usuario, String pass) {
         try {
-            // Obtenemos SOLO la URL de tu db.properties
             String url = propiedades.getProperty("mysql.url");
-
-            // Intentamos hacer una conexión REAL a la base de datos con los datos del login
             Connection conexionPrueba = DriverManager.getConnection(url, usuario, pass);
-
-            // Si llegamos a esta línea, la conexión fue un éxito. El usuario y clave son reales.
-            conexionPrueba.close(); // Cerramos esta conexión de prueba
-
-            // Guardamos las credenciales para usarlas en el resto del programa (Selects, Inserts, etc.)
+            conexionPrueba.close();
             usuarioNativo = usuario;
             passwordNativa = pass;
-
             return true;
-
         } catch (SQLException e) {
-            // Si el usuario no existe en MySQL o la contraseña está mal, MySQL rechaza la conexión
-            // y entra por este catch, devolviendo false al login.
             System.out.println("Fallo de login (Acceso Denegado por MySQL): " + e.getMessage());
             return false;
         }
     }
 
+    // public: lo llaman todas las subclases (inserts, selects, deletes, updates, procedures) al inicio de cada operación
     public void abrirConexionDB() {
         try {
             String url = propiedades.getProperty("mysql.url");
-
-            // Ahora la conexión no usa un texto fijo, sino el usuario que se validó en el login
             conexion = DriverManager.getConnection(url, usuarioNativo, passwordNativa);
             System.out.println("Conexión abierta con el usuario: " + usuarioNativo);
-
         } catch (SQLException e) {
             throw new RuntimeException("Fallo al conectar a la base de datos", e);
         }
     }
 
+    // public: lo llaman todas las subclases en el bloque finally para cerrar la conexión al terminar
     public void cerrarConexionBD() {
         try {
             if (conexion != null && !conexion.isClosed()) {
@@ -80,8 +73,7 @@ public class conexionDB {
         }
     }
 
-    // --- MÉTODOS PARA MONGODB ---
-
+    // public: lo usa selectInteracciones (subclase) para abrir la conexión con MongoDB
     public MongoClient abrirConexionMongo() {
         try {
             String uri = propiedades.getProperty("mongo.uri");
@@ -92,6 +84,7 @@ public class conexionDB {
         }
     }
 
+    // public: lo usa selectInteracciones para obtener la base de datos MongoDB una vez abierto el cliente
     public MongoDatabase getDatabaseMongo(MongoClient client) {
         String dbName = propiedades.getProperty("mongo.db");
         return client.getDatabase(dbName);
