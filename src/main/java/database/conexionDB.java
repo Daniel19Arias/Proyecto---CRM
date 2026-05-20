@@ -1,5 +1,6 @@
 package database;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -29,8 +30,10 @@ public class conexionDB {
 
     // private: método auxiliar interno que solo llama el constructor; no debe ser accesible ni sobreescrito
     private void cargarPropiedades() {
-        try (InputStream input = getClass().getClassLoader().getResourceAsStream("db.properties")) {
-            if (input != null) propiedades.load(input);
+        // FileInputStream: lee el archivo físico de propiedades como un flujo de bytes para cargarlo en memoria
+        try (FileInputStream fis = new FileInputStream("src/main/resources/db.properties")) {
+            // load: detecta los '=' de properties y los guarda
+            propiedades.load(fis);
         } catch (IOException ex) {
             System.out.println("Error al leer db.properties: " + ex.getMessage());
         }
