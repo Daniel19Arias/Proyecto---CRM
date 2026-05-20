@@ -18,6 +18,7 @@ public class conexionDB {
 
     // private: solo esta clase carga y gestiona las propiedades; ninguna subclase necesita acceder a ellas
     private Properties propiedades;
+    
 
     // public static: son las credenciales globales de sesión que deben ser accesibles desde cualquier clase del programa
     public static String usuarioNativo;
@@ -25,6 +26,7 @@ public class conexionDB {
 
     public conexionDB() {
         propiedades = new Properties();
+        //Es una clase oficial que viene integrada en Java (java.util.Properties). Está diseñada específicamente para leer archivos que tengan extensión .properties
         cargarPropiedades();
     }
 
