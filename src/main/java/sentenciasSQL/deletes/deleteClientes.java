@@ -23,6 +23,7 @@ public class deleteClientes extends conexionDB {
             String SQL = String.format("DELETE FROM %s WHERE %s = ?",
                     SchemaDB.TAB_CLI, SchemaDB.COL_CLI_ID);
             preparedStatement = conexion.prepareStatement(SQL);
+            // null: al no pasarle un JFrame padre, la ventana emergente se centrará en medio del monitor
             id_string = JOptionPane.showInputDialog(null, "Ingrese el id del cliente que desea eliminar: ");
             id = Integer.parseInt(id_string);
             preparedStatement.setInt(1, id);

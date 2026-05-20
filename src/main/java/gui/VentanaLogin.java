@@ -90,13 +90,15 @@ public class VentanaLogin extends JFrame {
     
     // Método normal: Muestra un mensaje de error en pantalla sin cerrar el programa
     public void mostrarError(String mensaje) {
-        JOptionPane.showMessageDialog(this, mensaje, "ERROR", JOptionPane.ERROR_MESSAGE);
+        // null: indica que la ventana se centrará en la pantalla al no tener un componente padre asociado
+        JOptionPane.showMessageDialog(null, mensaje, "ERROR", JOptionPane.ERROR_MESSAGE);
     }
 
     // Método sobrecargado: Hace lo mismo pero recibe un boolean adicional.
     // Si 'cerrarApp' es true, además de mostrar el error, finaliza la ejecución del programa.
     public void mostrarError(String mensaje, boolean cerrarApp) {
-        JOptionPane.showMessageDialog(this, mensaje, "ERROR", JOptionPane.ERROR_MESSAGE);
+        // null: centra la ventana en la pantalla
+        JOptionPane.showMessageDialog(null, mensaje, "ERROR", JOptionPane.ERROR_MESSAGE);
         if (cerrarApp) {
             System.exit(0);
         }

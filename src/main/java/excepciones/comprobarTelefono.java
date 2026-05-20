@@ -7,6 +7,7 @@ public class comprobarTelefono extends RuntimeException {
 
     // public: el constructor de una excepción debe ser public para que pueda instanciarse con 'throw new ...' desde cualquier paquete
     public comprobarTelefono() {
+        // super: llama al constructor de la clase padre (RuntimeException) para registrar internamente el mensaje de error
         super("Error en el formato del teléfono.");
         JOptionPane.showMessageDialog(null, "El teléfono no es válido.\nDebe contener exactamente 9 números (sin letras ni espacios).", "Error de Formato", JOptionPane.WARNING_MESSAGE);
     }
