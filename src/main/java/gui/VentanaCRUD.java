@@ -69,6 +69,9 @@ public class VentanaCRUD extends JFrame {
             procedureConvertirLeads.procedureConvertirLeads();
         });
 
+        // Al usar 'new', se crea un botón totalmente nuevo e independiente en la memoria.
+        // La variable 'select' simplemente deja de apuntar al botón anterior (Leads) y empieza a apuntar a este nuevo.
+        // El botón anterior no se borra porque ya está guardado a salvo dentro de su menú correspondiente.
         select = new JMenuItem("Listar Clientes");
         insert = new JMenuItem("Insert Cliente");
         delete = new JMenuItem("Eliminar Cliente");
