@@ -67,10 +67,10 @@ public class VentanaLogin extends JFrame {
             } else {
                 intentos++;
                 if (intentos >= maxIntentos) {
-                    // SE USA EL MÉTODO SOBRECARGADO: Pasamos el mensaje y 'true' para cerrar la aplicación
+                    // metodo sobrecargado: Pasamos el mensaje y 'true' para cerrar la aplicación
                     mostrarError("Sin intentos\nCerrando la app", true);
                 } else {
-                    // SE USA EL MÉTODO NORMAL: Pasamos solo el mensaje, muestra el error pero deja continuar
+                    // metodo original: Pasamos solo el mensaje, muestra el error pero deja continuar
                     mostrarError("Nombre de usuario o contraseña incorrectos.\nIntentos restantes: " + (3 - intentos));
                     nombre.setText("");
                     password.setText("");
