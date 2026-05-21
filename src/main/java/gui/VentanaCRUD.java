@@ -7,6 +7,7 @@ import sentenciasSQL.updates.*;
 import sentenciasSQL.procedures.*;
 
 import javax.swing.*;
+import java.awt.Color;
 
 public class VentanaCRUD extends JFrame {
 
@@ -19,13 +20,43 @@ public class VentanaCRUD extends JFrame {
     // son referencias temporales internas, ninguna clase los usa
     private JMenuItem select, insert, delete, update, cerrarSesion, procedure;
 
+    // private: etiqueta visual para mostrar la info de bienvenida
+    // es de uso exclusivo interno y no interactúa con el exterior
+    private JLabel textoFondo;
+
     public VentanaCRUD() {
         setTitle("CRM - AdromiTech");
-        setSize(600, 400);
+        setSize(800, 500);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
         setLocationRelativeTo(null);
+
+        //Hover de los menús y los items
+        // Gracias al UIManager de Java, que es una clase estatica(por eso no se crea objeto), sobreescribimos el azul nativo por defecto 
+        // y le indicamos que al pasar el ratón (hover) use nuestro azul corporativo.
+        UIManager.put("Menu.selectionBackground", Color.decode("#2D5596"));
+        UIManager.put("Menu.selectionForeground", Color.WHITE);
+
+        // Hacemos exactamente lo mismo para los desplegables interiores
+        UIManager.put("MenuItem.selectionBackground", Color.decode("#2D5596"));
+        UIManager.put("MenuItem.selectionForeground", Color.WHITE);
+        // ------------------------------------
+
+
+        // Info de bienvenida--------------:
+        // Se utiliza HTML dentro de un JLabel para aplicar formato (títulos, negritas, saltos de línea) 
+        // sin necesidad de crear múltiples componentes de texto.
+        textoFondo = new JLabel("<html><h2 style='color:#2D5596;'>Bienvenido al CRM de AdromiTech</h2>"
+                + "Sistema integral de gestión diseñado para optimizar el flujo de trabajo del equipo comercial y administrativo. Centraliza todas tus operaciones en un único entorno rápido y seguro.<br><br>"
+                + "<b>¿Cómo empezar a usar la plataforma?</b><br><br>"
+                + "- <b>Navegación:</b> Utiliza la barra de menú superior para desplegar los módulos disponibles (Clientes, Leads, Facturas, Comerciales...).<br><br>"
+                + "- <b>Operaciones:</b> Dentro de cada módulo, haz clic en la acción deseada (Listar, Insertar, Actualizar o Eliminar) para enviar la orden a la base de datos.<br><br>"
+                + "- <b>Procesos Avanzados:</b> Ciertas pestañas contienen herramientas automatizadas como 'Generar Factura' o 'Convertir Lead a Cliente'.<br><br>"
+                + "<i>Desarrollado y mantenido por el equipo de AdromiTech.</i></html>");
+        // Se ubica en el recuadro blanco del centro
+        textoFondo.setBounds(50, 20, 700, 350);
+        add(textoFondo);
 
         leads = new JMenu("Leads");
         cliente = new JMenu("Clientes");
@@ -36,6 +67,23 @@ public class VentanaCRUD extends JFrame {
         producto = new JMenu("Productos");
         interacciones = new JMenu("Interacciones");
         salir = new JMenu("Salir");
+
+         
+         // Metemos un separador entre los menús, creamos un 'MatteBorder'
+         // Una herramienta de swing que te deja definir el grosor de cada lado.
+        // Esto dibuja una fina línea de 2 píxel SOLO en la parte derecha de cada pestaña.
+        javax.swing.border.Border separador = BorderFactory.createMatteBorder(0, 0, 0, 2, Color.LIGHT_GRAY);
+        
+        leads.setBorder(separador);
+        cliente.setBorder(separador);
+        comercial.setBorder(separador);
+        factura.setBorder(separador);
+        pedido.setBorder(separador);
+        producto.setBorder(separador);
+        interacciones.setBorder(separador);
+        salir.setBorder(separador);
+
+        // Y ahora se añaden las opciones del menú por modulo:
 
         select = new JMenuItem("Listar Leads");
         insert = new JMenuItem("Insertar Leads");

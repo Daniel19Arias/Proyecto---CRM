@@ -1,6 +1,7 @@
 package gui;
 
 import javax.swing.*;
+import java.awt.Color;
 import database.*;
 
 public class VentanaLogin extends JFrame {
@@ -47,6 +48,12 @@ public class VentanaLogin extends JFrame {
         bIniciarSesion = new JButton("Iniciar Sesión");
         bIniciarSesion.setBounds(30, 150, 150, 30);
         bIniciarSesion.setFocusPainted(false);
+        
+        // Colores de nuestro CRM
+        bIniciarSesion.setBackground(Color.decode("#2D5596"));
+        bIniciarSesion.setForeground(Color.WHITE);
+        
+        
         add(bIniciarSesion);
         bIniciarSesion.addActionListener(e -> {
             String username = nombre.getText();
@@ -74,6 +81,12 @@ public class VentanaLogin extends JFrame {
         bCancelar = new JButton("Cancelar");
         bCancelar.setBounds(200, 150, 150, 30);
         bCancelar.setFocusPainted(false);
+        
+        // --- Diseño corporativo ---
+        bCancelar.setBackground(Color.decode("#2D5596"));
+        bCancelar.setForeground(Color.WHITE);
+        // --------------------------
+        
         add(bCancelar);
         bCancelar.addActionListener(e -> {
             System.exit(0);

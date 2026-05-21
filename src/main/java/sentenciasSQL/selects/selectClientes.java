@@ -39,6 +39,9 @@ public class selectClientes extends conexionDB {
 
             // Rellenar el modelo con los datos del ResultSet
             while (rs.next()) {
+                // Se usa 'new Object[]' porque el JTable exige que le pasemos un array para separar los datos por columnas.
+                // Usamos 'Object' porque permite mezclar distintos tipos de datos (como el 'int' del ID y los 'String' del resto)
+                // en la misma estructura sin que Java dé errores de compatibilidad.
                 modelo.addRow(new Object[]{
                     rs.getInt(SchemaDB.COL_CLI_ID),
                     rs.getString(SchemaDB.COL_CLI_RS),
